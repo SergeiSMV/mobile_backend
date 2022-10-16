@@ -1,0 +1,18 @@
+ERROR:websockets.server:connection handler failed
+Traceback (most recent call last):
+  File "/usr/local/bin/raz_backend/venv/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/usr/local/bin/raz_backend/venv/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/usr/local/bin/raz_backend/venv/lib/python3.9/site-packages/websockets_routes/routers.py", line 88, in __call__
+    await handle(ws, path)
+TypeError: 'NoneType' object is not callable
+ERROR:websockets.server:connection handler failed
+Traceback (most recent call last):
+  File "/usr/local/bin/raz_backend/venv/lib/python3.9/site-packages/websockets/legacy/server.py", line 232, in handler
+    await self.ws_handler(self)
+  File "/usr/local/bin/raz_backend/venv/lib/python3.9/site-packages/websockets/legacy/server.py", line 1146, in _ws_handler
+    return await cast(
+  File "/usr/local/bin/raz_backend/venv/lib/python3.9/site-packages/websockets_routes/routers.py", line 88, in __call__
+    await handle(ws, path)
+TypeError: 'NoneType' object is not callable
