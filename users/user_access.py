@@ -1,6 +1,7 @@
 import json
 from urllib.parse import unquote
 
+
 from connection import cursor, connect
 from initialization import router
 
@@ -16,8 +17,5 @@ async def get_access(ws, path):
     connect.commit()
     for pages in result:
         page = pages['page']
-        # pages_map = {
-        #     'page': page
-        # }
         pageList.append(page)
     await ws.send(json.dumps(pageList))
