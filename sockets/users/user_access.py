@@ -56,6 +56,10 @@ async def sql_user_access(data):
 
 
 async def sql_save_user_access(data):
+    client_status = data['status']
+    client_data = {}
+    client_id = data['data'][0]['user_id']
+    client_data['user_id'] = client_id
     for update in data['data']:
         string_id = update['id']
         access_value = update['access']
@@ -65,8 +69,21 @@ async def sql_save_user_access(data):
         cursor.execute(sql, val)
         cursor.fetchall()
         connect.commit()
-    # await CLIENTS_ACCESS[data['data']['user_id']].send(json.dumps( data['data']))
-    print(CLIENTS_ACCESS)
+
+    print(client_status, client_id)
+    sql1 = 'UPDATE users SET status = %s WHERE id = %s'
+    val1 = (client_status, client_id)
+    connect.ping(reconnect=True)
+    cursor.execute(sql1, val1)
+    cursor.fetchall()
+    connect.commit()
+
+    if str(client_id) in CLIENTS_ACCESS:
+        client_result = await sql_user_access(client_data)
+        try:
+            await CLIENTS_ACCESS[str(client_id)].send(json.dumps(client_result))
+        except websockets.ConnectionClosed:
+            pass
 
 
 async def delClient(user_id):
