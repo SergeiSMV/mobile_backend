@@ -21,6 +21,7 @@ async def index_pages(ws, path):
 async def sql_index_pages(data):
     user_id = data['user_id']
     user_pages = []
+    db_pages = []
 
     sql1 = 'SELECT * FROM pages'
     connect.ping(reconnect=True)
@@ -36,6 +37,9 @@ async def sql_index_pages(data):
     for up in page_access:
         user_page = up['page']
         user_pages.append(user_page)
+    for up in pages_const:
+        db_page = up['page']
+        db_pages.append(db_page)
 
     for p in pages_const:
         page = p['page']
@@ -50,6 +54,19 @@ async def sql_index_pages(data):
             val3 = (user_id, page, mother_page, page_department, page_description, access)
             connect.ping(reconnect=True)
             cursor.execute(sql3, val3)
+            cursor.fetchall()
+            connect.commit()
+            continue
+
+    for dl in page_access:
+        page = dl['page']
+        if page in db_pages:
+            continue
+        else:
+            sql4 = 'DELETE FROM page_access WHERE page = %s AND user_id = %s'
+            val4 = (page, user_id)
+            connect.ping(reconnect=True)
+            cursor.execute(sql4, val4)
             cursor.fetchall()
             connect.commit()
             continue

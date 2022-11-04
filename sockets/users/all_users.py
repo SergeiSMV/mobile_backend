@@ -34,8 +34,10 @@ async def sql_all_users():
         patronymic = user['patronymic']
         position = user['position']
         department = user['department']
-        phone = user['surname']
+        phone = user['phone']
         status = user['status']
+        login = user['login']
+        password = user['pass']
         users_map = {
             'user_id': user_id,
             'surname': surname,
@@ -44,7 +46,9 @@ async def sql_all_users():
             'position': position,
             'department': department,
             'phone': phone,
-            'status': status
+            'status': status,
+            'login': login,
+            'pass': password
         }
         usersList.append(users_map)
     return usersList
