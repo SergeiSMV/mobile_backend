@@ -5,3 +5,9 @@ from sockets.users.user_info import user_info
 from sockets.users.all_users import all_users
 from sockets.users.users_pages_access import users_pages
 from sockets.users.add_user import add_user
+from sockets.users.delete_user import delete_user
+from sockets.images.save_image import save_image
+from sockets.sim.sim_items import sim_items
+from sockets.images.delete_image import delete_image
+from sockets.sim.sim_locates import sim_locates
+from sockets.sim.sim_item_move import sim_item_move

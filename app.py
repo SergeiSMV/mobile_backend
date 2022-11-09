@@ -4,10 +4,9 @@ import logging
 
 from sockets import *
 
-
 from initialization import router
 
-start_server = websockets.serve(router, "185.46.10.55", 1512)
+start_server = websockets.serve(router, "185.46.10.55", 1512, max_size=None)
 
 if __name__ == '__main__':
     # logging.basicConfig(filename='errors.log', level=logging.ERROR)
