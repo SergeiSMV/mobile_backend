@@ -3,13 +3,12 @@ import json
 import websockets
 from connection import cursor, connect
 from initialization import router
-import os
 
 CLIENTS_ACCESS = {}
 
 
-@router.route('/sim_items')
-async def sim_items(ws, path):
+@router.route('/admission_items')
+async def admission_items(ws, path):
     global CLIENTS_ACCESS
     user_id = 0
     try:
@@ -33,10 +32,10 @@ async def sim_items(ws, path):
         await delClient(user_id)
 
 
-async def sim_all_items(broadcast=False):
-    allSimItemsList = []
+async def sql_admission_items(broadcast=False):
+    admissionsItemsList = []
 
-    sql = 'SELECT * FROM sim'
+    sql = 'SELECT * FROM admissions'
     connect.ping(reconnect=True)
     cursor.execute(sql, )
     result = cursor.fetchall()
@@ -44,44 +43,28 @@ async def sim_all_items(broadcast=False):
 
     for items in result:
         itemId = items['id']
-        place = items['place']
-        cell = items['cell']
         bcode = items['bcode']
         category = items['category']
         name = items['name']
         color = items['color']
         producer = items['producer']
-        quantity = items['quant']
-        reserve = items['reserve']
         unit = items['unit']
+
+        quant = items['quant']
         fifo = items['fifo'].strftime('%d.%m.%Y')
         author = items['author']
-        status = items['status']
-        comment = items['comment']
-        imageLinks = []
-
-        try:
-            if os.listdir(f'/usr/local/bin/images/{category}/{name}/{producer}/{color}'):
-                for file in os.listdir(f'/usr/local/bin/images/{category}/{name}/{producer}/{color}'):
-                    imageLinks.append(f'https://backraz.ru/images/{category}/{name}/{producer}/{color}/{file}')
-            else:
-                pass
-        except FileNotFoundError:
-            pass
 
         items_map = {
-            'itemId': itemId, 'place': place, 'cell': cell, 'bcode': bcode,
+            'itemId': itemId, 'bcode': bcode,
             'category': category, 'name': name, 'color': color, 'producer': producer,
-            'quantity': quantity, 'reserve': reserve, 'unit': unit, 'fifo': fifo,
-            'author': author, 'status': status, 'comment': comment,
-            'images': imageLinks
+            'unit': unit, 'quant': quant, 'fifo': fifo, 'author': author
         }
-        allSimItemsList.append(items_map)
+        admissionsItemsList.append(items_map)
     if broadcast:
         for ws in CLIENTS_ACCESS:
-            await CLIENTS_ACCESS[ws].send(json.dumps(allSimItemsList))
+            await CLIENTS_ACCESS[ws].send(json.dumps(admissionsItemsList))
     else:
-        return allSimItemsList
+        return admissionsItemsList
 
 
 async def delClient(user_id):

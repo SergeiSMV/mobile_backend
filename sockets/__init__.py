@@ -11,3 +11,7 @@ from sockets.sim.sim_items import sim_items
 from sockets.images.delete_image import delete_image
 from sockets.sim.sim_locates import sim_locates
 from sockets.sim.sim_item_move import sim_item_move
+from sockets.sim.sim_add_item import sim_add_item
+from sockets.sim.admissions_item import admission_items
+from sockets.sim.uniq_admissions import uniq_admissions
+from sockets.input_control.move_input_control import move_input_control

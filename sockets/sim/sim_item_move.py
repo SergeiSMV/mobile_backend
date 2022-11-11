@@ -3,7 +3,6 @@ import json
 import websockets
 from connection import cursor, connect
 from initialization import router
-import os
 
 from sockets.sim.sim_items import sim_all_items
 
