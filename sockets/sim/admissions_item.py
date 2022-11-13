@@ -22,7 +22,7 @@ async def admission_items(ws, path):
                 func = client_data['func']
                 result = await eval(func + '()')
                 await ws.send(json.dumps(result))
-                await ws.wait_closed()
+                # await ws.wait_closed()
             except websockets.ConnectionClosedOK:
                 print(f'websockets.ConnectionClosedOK: отключился клиент {ws}')
                 await delClient(user_id)

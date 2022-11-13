@@ -57,7 +57,8 @@ async def sim_all_items(broadcast=False):
         fifo = items['fifo'].strftime('%d.%m.%Y')
         author = items['author']
         status = items['status']
-        comment = items['comment']
+        comment = items['comment'].split(']')
+
         imageLinks = []
 
         try:

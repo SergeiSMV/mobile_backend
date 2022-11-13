@@ -15,3 +15,5 @@ from sockets.sim.sim_add_item import sim_add_item
 from sockets.sim.admissions_item import admission_items
 from sockets.sim.uniq_admissions import uniq_admissions
 from sockets.input_control.move_input_control import move_input_control
+from sockets.sim.change_item_status import change_item_status
+from sockets.sim.sim_send_barcode import send_barcode
