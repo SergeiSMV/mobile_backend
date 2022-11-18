@@ -1,12 +1,11 @@
 import ast
-import base64
 import os
 
 import websockets
 from initialization import router
 import json
 
-from sockets.sim.sim_items import sim_all_items
+from sockets.sim.items.sim_items import sim_all_items
 
 
 @router.route('/delete_image')

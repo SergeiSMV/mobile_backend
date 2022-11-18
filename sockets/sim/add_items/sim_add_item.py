@@ -4,7 +4,7 @@ import json
 import websockets
 from connection import cursor, connect
 from initialization import router
-from sockets.sim.admissions_item import sql_admission_items
+from sockets.sim.add_items.admissions_item import sql_admission_items
 
 
 @router.route('/sim_add_item')

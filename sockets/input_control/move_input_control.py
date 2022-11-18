@@ -5,8 +5,8 @@ from connection import cursor, connect
 from initialization import router
 from datetime import datetime
 
-from sockets.sim.admissions_item import sql_admission_items
-from sockets.sim.sim_items import sim_all_items
+from sockets.sim.add_items.admissions_item import sql_admission_items
+from sockets.sim.items.sim_items import sim_all_items
 
 
 @router.route('/move_input_control')

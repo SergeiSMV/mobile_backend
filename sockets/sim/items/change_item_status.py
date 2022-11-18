@@ -4,11 +4,11 @@ import websockets
 from connection import cursor, connect
 from initialization import router
 
-from sockets.sim.sim_items import sim_all_items
+from sockets.sim.items.sim_items import sim_all_items
 
 
-@router.route('/sim_item_move')
-async def sim_item_move(ws, path):
+@router.route('/change_item_status')
+async def change_item_status(ws, path):
     try:
         while True:
             try:
@@ -25,13 +25,20 @@ async def sim_item_move(ws, path):
         print(f'sim_item_move websockets.ConnectionClosedError: отключился клиент {ws}')
 
 
-async def sql_sim_item_move(data):
+async def sql_change_item_status(data):
     item_id = data['item_id']
-    place = data['place']
-    cell = data['cell']
+    all_comments = data['comment']
+    status = data['status']
+    comment = ''
 
-    sql = 'UPDATE sim SET place = %s, cell = %s  WHERE id = %s'
-    val = (place, cell, item_id)
+    for c in all_comments:
+        if c == '':
+            continue
+        else:
+            comment = f'{c}]' + comment
+
+    sql = 'UPDATE sim SET status = %s, comment = %s WHERE id = %s'
+    val = (status, comment, item_id)
     connect.ping(reconnect=True)
     cursor.execute(sql, val)
     cursor.fetchall()
