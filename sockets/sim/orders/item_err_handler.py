@@ -10,8 +10,8 @@ from sockets.sim.orders.sim_orders import sql_sim_orders
 from sockets.sim.items.sim_uniq_items import sql_uniq_sim_items
 
 
-@router.route('/color_err_handler')
-async def color_err_handler(ws, path):
+@router.route('/item_err_handler')
+async def item_err_handler(ws, path):
     try:
         while True:
             try:
@@ -28,13 +28,21 @@ async def color_err_handler(ws, path):
         print(f'sim_item_move websockets.ConnectionClosedError: отключился клиент {ws}')
 
 
-async def sql_color_err_handler(data):
+async def sql_item_err_handler(data):
     item_data = data['item_data']
     order_id = item_data['order_id']
     num = item_data['num']
     item_id = item_data['item_id']
     data = {'num': num}
-    err_color = item_data['err_color']
+    err_item = item_data['err_item']
+
+    split_err = err_item.split(' ')
+    err_category = split_err[0]
+    err_color = split_err[len(split_err) - 1]
+    del split_err[0]
+    del split_err[len(split_err) - 1]
+    err_name = ' '.join(split_err)
+
     status = item_data['status']
     err_cause = item_data['err_cause']
 
@@ -45,11 +53,9 @@ async def sql_color_err_handler(data):
     order_quant = item_data['order_quant']
     unit = item_data['unit']
 
-    print(err_cause)
-
     if err_cause == 'clear':
         # снимаем ошибку с позиции в заявке
-        clear = 'UPDATE sim_orders SET status = %s, err_cause = %s, err_color = %s  WHERE num = %s AND item_id = %s'
+        clear = 'UPDATE sim_orders SET status = %s, err_cause = %s, err_item = %s  WHERE num = %s AND item_id = %s'
         clear_val = (2, '', '', num, item_id)
         connect.ping(reconnect=True)
         cursor.execute(clear, clear_val)
@@ -76,12 +82,12 @@ async def sql_color_err_handler(data):
         cursor.fetchall()
         connect.commit()
 
-    elif err_cause == 'change_color':
-        # меняем цвет на складе
-        change_color = 'UPDATE sim SET color = %s WHERE id = %s'
-        change_value = (err_color, item_id)
+    elif err_cause == 'change_item':
+        # меняем комплектующие на складе
+        change_item = 'UPDATE sim SET category = %s, name = %s, color = %s WHERE id = %s'
+        change_value = (err_category, err_name, err_color, item_id)
         connect.ping(reconnect=True)
-        cursor.execute(change_color, change_value)
+        cursor.execute(change_item, change_value)
         cursor.fetchall()
         connect.commit()
 
@@ -178,11 +184,11 @@ async def sql_color_err_handler(data):
         status_list = []
         for st in result:
             status_list.append(st['status'])
-        status = min(status_list)
+        min_status = min(status_list)
 
         # ставим минимальный статус в ордере
         update_status = 'UPDATE sim_orders SET status = %s, fact_quant = fact_quant - %s WHERE id = %s'
-        update_value = (status, order_quant, order_id)
+        update_value = (min_status, order_quant, order_id)
         connect.ping(reconnect=True)
         cursor.execute(update_status, update_value)
         cursor.fetchall()

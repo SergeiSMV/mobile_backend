@@ -31,3 +31,7 @@ from sockets.sim.orders.sim_item_out import sim_item_out
 from sockets.sim.orders.access_item_out import access_item_out
 from sockets.sim.orders.color_err import color_err
 from sockets.sim.orders.color_err_handler import color_err_handler
+from sockets.sim.orders.quant_err import quant_err
+from sockets.sim.orders.quant_err_handler import quant_err_handler
+from sockets.sim.orders.item_err import item_err
+from sockets.sim.orders.item_err_handler import item_err_handler
